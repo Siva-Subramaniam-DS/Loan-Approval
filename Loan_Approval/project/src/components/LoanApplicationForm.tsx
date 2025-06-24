@@ -85,10 +85,12 @@ export const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({
     }
   };
 
-  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newLang = e.target.value;
-    setFormData(prev => ({ ...prev, language: newLang }));
-    onLanguageChange(newLang);
+  const handleLanguageChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    if (e.target instanceof HTMLSelectElement) {
+      const newLang = e.target.value;
+      setFormData(prev => ({ ...prev, language: newLang }));
+      onLanguageChange(newLang);
+    }
   };
 
   const validateForm = () => {
@@ -235,7 +237,7 @@ export const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({
             <FormField
               label="Income Source"
               name="income_source"
-              value={formData.income_source}
+              value={formData.income_source || ''}
               onChange={handleInputChange}
               error={errors.income_source}
               options={incomeSourceOptions}
@@ -245,7 +247,7 @@ export const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({
             <FormField
               label="Employment Type"
               name="employment_type"
-              value={formData.employment_type}
+              value={formData.employment_type || ''}
               onChange={handleInputChange}
               error={errors.employment_type}
               options={employmentTypes}
@@ -291,7 +293,7 @@ export const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({
             <FormField
               label="Existing Loans"
               name="existing_loans"
-              value={formData.existing_loans}
+              value={formData.existing_loans || 'No'}
               onChange={handleInputChange}
               options={[
                 { value: 'No', label: 'No existing loans' },
@@ -302,7 +304,7 @@ export const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({
               label="Existing EMI (₹)"
               name="emi_existing"
               type="number"
-              value={formData.emi_existing}
+              value={formData.emi_existing ?? ''}
               onChange={handleInputChange}
               placeholder="Current EMI amount"
               min={0}
