@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FormField } from './FormField';
+import { CustomDropdown } from './CustomDropdown';
 import { LoadingSpinner } from './LoadingSpinner';
 import { 
   DollarSign, 
@@ -183,7 +184,7 @@ export const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({
           
           {/* Language Selector */}
           <div className="w-48">
-            <FormField
+            <CustomDropdown
               label="Language"
               name="language"
               value={formData.language || 'en'}
@@ -276,7 +277,7 @@ export const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({
               step={1000}
               icon={<PiggyBank size={20} />}
             />
-            <FormField
+            <CustomDropdown
               label="Income Source"
               name="income_source"
               value={formData.income_source || ''}
@@ -285,8 +286,9 @@ export const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({
               options={incomeSourceOptions}
               required
               icon={<Briefcase size={20} />}
+              description="Select your primary source of income"
             />
-            <FormField
+            <CustomDropdown
               label="Employment Type"
               name="employment_type"
               value={formData.employment_type || ''}
@@ -295,6 +297,7 @@ export const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({
               options={employmentTypes}
               required
               icon={<Briefcase size={20} />}
+              description="Your current employment status"
             />
           </div>
         </div>
@@ -337,7 +340,7 @@ export const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({
               max={30}
               icon={<Calendar size={20} />}
             />
-            <FormField
+            <CustomDropdown
               label="Existing Loans"
               name="existing_loans"
               value={formData.existing_loans || 'No'}
@@ -346,6 +349,7 @@ export const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({
                 { value: 'No', label: 'No existing loans' },
                 { value: 'Yes', label: 'Have existing loans' }
               ]}
+              description="Do you currently have any active loans?"
             />
             <FormField
               label="Existing EMI (₹)"
