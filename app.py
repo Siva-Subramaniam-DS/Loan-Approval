@@ -18,7 +18,6 @@ logging.basicConfig(
     level=getattr(logging, log_level),
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('logs/loan_system.log'),
         logging.StreamHandler()
     ]
 )
@@ -657,9 +656,6 @@ def internal_error(error):
     return jsonify({'error': 'Internal server error', 'status': 500}), 500
 
 if __name__ == '__main__':
-    # Create necessary directories
-    os.makedirs('logs', exist_ok=True)
-    
     # Log startup
     logger.info("Starting Bank Loan Approval System")
     logger.info(f"Translation service available: {hasattr(translator, 'translate')}")

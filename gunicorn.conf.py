@@ -16,8 +16,8 @@ max_requests = 1000
 max_requests_jitter = 50
 
 # Logging
-accesslog = "logs/access.log"
-errorlog = "logs/error.log"
+accesslog = "-"  # Log to stdout
+errorlog = "-"   # Log to stderr
 loglevel = "info"
 access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"'
 
