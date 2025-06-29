@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session
+from flask import Flask, render_template, request, jsonify, session, send_from_directory, send_file
 from flask_cors import CORS
 import logging
 import os
@@ -7,21 +7,30 @@ import json
 import pickle
 import joblib
 import numpy as np
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Configure logging
+log_level = os.getenv('LOG_LEVEL', 'INFO')
 logging.basicConfig(
-    level=logging.INFO,
+    level=getattr(logging, log_level),
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('loan_system.log'),
+        logging.FileHandler('logs/loan_system.log'),
         logging.StreamHandler()
     ]
 )
 
-app = Flask(__name__)
-# Enable CORS for React frontend
-CORS(app, origins=['http://localhost:5173', 'http://localhost:3000'], supports_credentials=True)
-app.secret_key = 'your-secret-key-change-this-in-production'
+# Configure Flask app with static file serving
+static_folder = os.path.join('Loan_Approval', 'project', 'dist')
+app = Flask(__name__, static_folder=static_folder)
+
+# Enable CORS for React frontend - Use environment variable for production
+allowed_origins = os.getenv('ALLOWED_ORIGINS', 'http://localhost:5173,http://localhost:3000').split(',')
+CORS(app, origins=allowed_origins, supports_credentials=True)
+app.secret_key = os.getenv('SECRET_KEY', 'your-secret-key-change-this-in-production')
 logger = logging.getLogger(__name__)
 
 # Import your translation utility
@@ -376,6 +385,163 @@ class LoanCalculator:
 # Create a single instance of LoanCalculator
 loan_calculator = LoanCalculator()
 
+# Loan-focused chatbot class
+class LoanChatbot:
+    """Loan-focused chatbot for customer support"""
+    
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
+        
+        # Loan-related knowledge base
+        self.loan_knowledge = {
+            "eligibility": {
+                "keywords": ["eligible", "qualify", "criteria", "requirement", "minimum"],
+                "response": "To be eligible for a loan, you typically need: 1) Age 18-65 years, 2) CIBIL score 650+, 3) Stable income, 4) Valid documents (PAN, Aadhaar, salary slips), 5) Good employment history. Our app can check your exact eligibility - just fill out the loan application form!"
+            },
+            "cibil_score": {
+                "keywords": ["cibil", "credit score", "credit rating", "score"],
+                "response": "CIBIL score is crucial for loan approval. Here's what you need to know: 750+ = Excellent (easy approval), 700-749 = Good, 650-699 = Fair (may need documents), Below 650 = Needs improvement. You can check your CIBIL score for free from CIBIL's official website."
+            },
+            "documents": {
+                "keywords": ["documents", "papers", "proof", "verification", "kyc"],
+                "response": "Required documents for loan application: 1) Identity proof (PAN, Aadhaar), 2) Address proof, 3) Income proof (salary slips, ITR), 4) Bank statements (6 months), 5) Employment letter, 6) Photos. Keep these ready for faster processing!"
+            },
+            "interest_rate": {
+                "keywords": ["interest", "rate", "charges", "cost", "emi"],
+                "response": "Interest rates vary based on: 1) Your CIBIL score (higher score = lower rate), 2) Loan type, 3) Loan amount, 4) Tenure, 5) Income level. Current rates typically range from 8.5% to 18% annually. Our calculator shows estimated EMI based on 12% average rate."
+            },
+            "loan_types": {
+                "keywords": ["types", "kind", "personal", "home", "car", "business", "education"],
+                "response": "Common loan types: 1) Personal Loan (no collateral, higher rates), 2) Home Loan (lowest rates, long tenure), 3) Car Loan (asset-backed), 4) Business Loan (for entrepreneurs), 5) Education Loan (for studies). Each has different eligibility and rates."
+            },
+            "processing_time": {
+                "keywords": ["time", "duration", "how long", "when", "processing", "approval"],
+                "response": "Loan processing timeline: 1) Application submission: Instant, 2) Document verification: 1-2 days, 3) Credit check: 1 day, 4) Approval decision: 2-5 days, 5) Disbursement: 1-3 days after approval. Total: 5-10 working days for most loans."
+            },
+            "emi_calculation": {
+                "keywords": ["emi", "monthly", "payment", "installment", "calculate"],
+                "response": "EMI calculation formula: EMI = [P × R × (1+R)^N] / [(1+R)^N-1], where P=Principal, R=Monthly interest rate, N=Number of months. Our app automatically calculates your EMI, total payment, and processing fees!"
+            },
+            "rejection_reasons": {
+                "keywords": ["reject", "denied", "refuse", "decline", "why not approved"],
+                "response": "Common loan rejection reasons: 1) Low CIBIL score (<650), 2) Insufficient income, 3) High debt-to-income ratio, 4) Incomplete documents, 5) Employment instability, 6) Too many loan inquiries. Our app shows exactly what needs improvement!"
+            },
+            "improvement_tips": {
+                "keywords": ["improve", "increase", "better", "tips", "advice", "help"],
+                "response": "To improve loan approval chances: 1) Maintain CIBIL score 750+, 2) Reduce existing EMIs, 3) Show stable income growth, 4) Keep debt-to-income ratio below 40%, 5) Avoid multiple loan applications, 6) Maintain good banking relationships."
+            }
+        }
+        
+        self.general_responses = {
+            "greeting": "Hello! I'm here to help you with loan-related questions. You can ask me about loan eligibility, CIBIL scores, documents needed, interest rates, or use our loan calculator!",
+            "help": "I can help you with: ✓ Loan eligibility criteria ✓ CIBIL score guidance ✓ Required documents ✓ Interest rates & EMI ✓ Loan types ✓ Processing time ✓ Approval tips. What would you like to know?",
+            "off_topic": "I'm specialized in helping with loan-related queries only. Please ask me about loans, CIBIL scores, EMI calculations, loan eligibility, or related financial topics. How can I assist you with your loan needs?",
+            "default": "I'd be happy to help with your loan questions! You can ask me about eligibility criteria, CIBIL scores, required documents, interest rates, or try our loan eligibility calculator above."
+        }
+    
+    def is_loan_related(self, message):
+        """Check if the message is loan-related"""
+        loan_keywords = [
+            "loan", "credit", "cibil", "emi", "interest", "bank", "finance", 
+            "money", "borrow", "lending", "approval", "eligible", "document",
+            "income", "salary", "amount", "tenure", "repay", "installment",
+            "mortgage", "personal", "business", "car", "home", "education"
+        ]
+        
+        message_lower = message.lower()
+        return any(keyword in message_lower for keyword in loan_keywords)
+    
+    def get_response(self, message, language="en"):
+        """Generate response for user message"""
+        try:
+            message_lower = message.lower()
+            
+            # Check if message is loan-related
+            if not self.is_loan_related(message):
+                response = self.general_responses["off_topic"]
+                if language != "en":
+                    response = translator.translate(response, language)
+                return response
+            
+            # Check for greetings
+            greetings = ["hello", "hi", "hey", "start", "help"]
+            if any(greeting in message_lower for greeting in greetings):
+                response = self.general_responses["greeting"]
+                if language != "en":
+                    response = translator.translate(response, language)
+                return response
+            
+            # Check specific loan topics
+            for topic, data in self.loan_knowledge.items():
+                if any(keyword in message_lower for keyword in data["keywords"]):
+                    response = data["response"]
+                    if language != "en":
+                        response = translator.translate(response, language)
+                    return response
+            
+            # Default loan-related response
+            response = self.general_responses["default"]
+            if language != "en":
+                response = translator.translate(response, language)
+            return response
+            
+        except Exception as e:
+            self.logger.error(f"Chatbot error: {str(e)}")
+            return "I'm having trouble right now. Please try asking about loan eligibility, CIBIL scores, or use our loan calculator above."
+
+# Create chatbot instance
+loan_chatbot = LoanChatbot()
+
+# Serve React frontend (Single Page Application)
+@app.route('/')
+def serve_frontend():
+    """Serve the React frontend"""
+    try:
+        return send_file(os.path.join(static_folder, 'index.html'))
+    except FileNotFoundError:
+        return jsonify({
+            'error': 'Frontend not built. Please run: cd Loan_Approval/project && npm run build',
+            'status': 404
+        }), 404
+
+@app.route('/<path:path>')
+def serve_static_files(path):
+    """Serve static files or fallback to React router"""
+    try:
+        # Try to serve the requested file
+        return send_from_directory(static_folder, path)
+    except FileNotFoundError:
+        # Fallback to React router for SPA routing
+        try:
+            return send_file(os.path.join(static_folder, 'index.html'))
+        except FileNotFoundError:
+            return jsonify({
+                'error': 'Frontend not built. Please run: cd Loan_Approval/project && npm run build',
+                'status': 404
+            }), 404
+
+# API Routes with /api prefix for better organization
+@app.route('/api/calculate_loan', methods=['POST'])
+def api_calculate_loan():
+    """Calculate loan eligibility and status"""
+    return calculate_loan()
+
+@app.route('/api/translate', methods=['POST'])
+def api_translate_text():
+    """Translate text to selected language"""
+    return translate_text()
+
+@app.route('/api/chatbot', methods=['POST'])
+def api_chatbot():
+    """Loan-focused chatbot endpoint"""
+    return chatbot()
+
+@app.route('/api/health')
+def api_health_check():
+    """Health check endpoint"""
+    return health_check()
+
+# Keep original routes for backward compatibility
 @app.route('/calculate_loan', methods=['POST'])
 def calculate_loan():
     """Calculate loan eligibility and status"""
@@ -388,9 +554,9 @@ def calculate_loan():
         
         # Validate required fields
         required_fields = ['bank_balance', 'cibil_score', 'loan_amount', 'monthly_income', 
-                          'loan_tenure', 'age']
+                          'loan_tenure', 'age', 'employment_type', 'income_source', 'existing_loans']
         for field in required_fields:
-            if field not in data or data[field] == '':
+            if field not in data or data[field] == '' or data[field] is None:
                 return jsonify({'success': False, 'error': f'Missing required field: {field}'}), 400
         
         # Calculate loan eligibility using the instance
@@ -432,20 +598,58 @@ def translate_text():
         logger.error(f"Translation error: {str(e)}")
         return jsonify({'success': False, 'error': 'Translation service unavailable'}), 500
 
+@app.route('/chatbot', methods=['POST'])
+def chatbot():
+    """Loan-focused chatbot endpoint"""
+    try:
+        data = request.get_json()
+        message = data.get('message', '').strip()
+        language = data.get('language', 'en')
+        
+        if not message:
+            return jsonify({'success': False, 'error': 'No message provided'}), 400
+        
+        # Log the chatbot request (for analytics)
+        logger.info(f"Chatbot query from {request.remote_addr}: {message[:50]}...")
+        
+        # Get chatbot response
+        response = loan_chatbot.get_response(message, language)
+        
+        return jsonify({
+            'success': True, 
+            'response': response,
+            'is_loan_related': loan_chatbot.is_loan_related(message)
+        })
+        
+    except Exception as e:
+        logger.error(f"Chatbot error: {str(e)}")
+        return jsonify({'success': False, 'error': 'Chatbot service unavailable'}), 500
+
 @app.route('/health')
 def health_check():
     """Health check endpoint"""
     return jsonify({
         'status': 'healthy',
         'timestamp': datetime.now().isoformat(),
-        'version': '1.0.0'
+        'version': '1.0.0',
+        'frontend_built': os.path.exists(os.path.join(static_folder, 'index.html'))
     })
 
 @app.errorhandler(404)
 def not_found(error):
     """Handle 404 errors"""
     logger.warning(f"404 error for {request.url} from {request.remote_addr}")
-    return jsonify({'error': 'Not found', 'status': 404}), 404
+    # For API routes, return JSON error
+    if request.path.startswith('/api/'):
+        return jsonify({'error': 'Not found', 'status': 404}), 404
+    # For frontend routes, serve React app (SPA routing)
+    try:
+        return send_file(os.path.join(static_folder, 'index.html'))
+    except FileNotFoundError:
+        return jsonify({
+            'error': 'Frontend not built. Please run: cd Loan_Approval/project && npm run build',
+            'status': 404
+        }), 404
 
 @app.errorhandler(500)
 def internal_error(error):
@@ -455,14 +659,17 @@ def internal_error(error):
 
 if __name__ == '__main__':
     # Create necessary directories
-    os.makedirs('templates', exist_ok=True)
-    os.makedirs('static/css', exist_ok=True)
-    os.makedirs('static/js', exist_ok=True)
     os.makedirs('logs', exist_ok=True)
     
     # Log startup
     logger.info("Starting Bank Loan Approval System")
     logger.info(f"Translation service available: {hasattr(translator, 'translate')}")
+    logger.info(f"Static folder: {static_folder}")
+    logger.info(f"Frontend built: {os.path.exists(os.path.join(static_folder, 'index.html'))}")
     
     # Run the application
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    debug_mode = os.getenv('FLASK_DEBUG', 'False').lower() == 'true'
+    port = int(os.getenv('PORT', 5000))
+    host = os.getenv('HOST', '0.0.0.0')
+    
+    app.run(debug=debug_mode, host=host, port=port)

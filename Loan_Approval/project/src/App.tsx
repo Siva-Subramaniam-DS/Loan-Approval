@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { LoanApplicationForm } from './components/LoanApplicationForm';
 import { LoanResult } from './components/LoanResult';
 import { ErrorMessage } from './components/ErrorMessage';
+import Chatbot from './components/Chatbot';
 import { useLoanApplication } from './hooks/useLoanApplication';
 import { Building2, Shield, Award, Users } from 'lucide-react';
 
@@ -191,6 +192,9 @@ function App() {
           </div>
         </div>
       </footer>
+
+      {/* Loan Chatbot */}
+      <Chatbot language={currentLanguage} />
     </div>
   );
 }

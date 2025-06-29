@@ -38,7 +38,7 @@ export const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({
     age: 0,
     employment_type: '',
     income_source: '',
-    existing_loans: 'No',
+    existing_loans: '',
     emi_existing: 0,
     language: currentLanguage
   });
@@ -129,6 +129,10 @@ export const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({
 
     if (!formData.income_source) {
       newErrors.income_source = 'Income source is required';
+    }
+
+    if (!formData.existing_loans) {
+      newErrors.existing_loans = 'Please select if you have existing loans';
     }
 
     setErrors(newErrors);
@@ -343,12 +347,15 @@ export const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({
             <CustomDropdown
               label="Existing Loans"
               name="existing_loans"
-              value={formData.existing_loans || 'No'}
+              value={formData.existing_loans || ''}
               onChange={handleInputChange}
               options={[
+                { value: '', label: 'Select an option' },
                 { value: 'No', label: 'No existing loans' },
                 { value: 'Yes', label: 'Have existing loans' }
               ]}
+              error={errors.existing_loans}
+              required
               description="Do you currently have any active loans?"
             />
             <FormField

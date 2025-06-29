@@ -1,20 +1,28 @@
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 
+                   (import.meta.env.DEV ? 'http://localhost:5000' : window.location.origin);
 
 class ApiService {
   private async makeRequest<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
-      ...options,
-    });
+    try {
+      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          ...options.headers,
+        },
+        credentials: 'include',
+        ...options,
+      });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error(`API request failed for ${endpoint}:`, error);
+      throw error;
     }
-
-    return await response.json();
   }
 
   async calculateLoan(data: any) {
@@ -36,6 +44,16 @@ class ApiService {
 
   async healthCheck() {
     return this.makeRequest('/health');
+  }
+
+  async chatbot(message: string, language: string = 'en') {
+    return this.makeRequest('/chatbot', {
+      method: 'POST',
+      body: JSON.stringify({
+        message,
+        language,
+      }),
+    });
   }
 }
 

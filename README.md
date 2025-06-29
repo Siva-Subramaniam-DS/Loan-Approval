@@ -4,16 +4,22 @@ A modern loan approval system with AI/ML capabilities, featuring a Flask Python 
 
 ## 🚀 Quick Start
 
-### Option 1: Using Development Scripts (Recommended)
+### Development Mode
+```bash
+# Backend
+python app.py
 
-**Windows (PowerShell):**
-```powershell
-.\start_dev.ps1
+# Frontend (in new terminal)
+cd Loan_Approval/project
+npm install
+npm run dev
 ```
 
-**Windows (Command Prompt):**
-```cmd
-start_dev.bat
+### Production Deployment
+```bash
+# Use the deployment script
+chmod +x deploy.sh
+./deploy.sh
 ```
 
 ### Option 2: Manual Setup
@@ -82,6 +88,7 @@ The React frontend is already configured to connect to the Flask backend:
 - ✅ Multi-language support (9 languages)
 - ✅ CIBIL score analysis
 - ✅ Real-time eligibility calculation
+- ✅ **Smart loan-focused chatbot**
 - ✅ RESTful API endpoints
 - ✅ CORS support for frontend
 - ✅ Comprehensive logging
@@ -90,10 +97,19 @@ The React frontend is already configured to connect to the Flask backend:
 - ✅ Modern UI with Tailwind CSS
 - ✅ Type-safe API integration
 - ✅ Multi-language interface
+- ✅ **24/7 Loan Assistant Chatbot**
 - ✅ Real-time form validation
 - ✅ Responsive design
 - ✅ Error handling
 - ✅ Loading states
+
+### 🤖 Chatbot Features
+- ✅ **Loan-focused conversations only**
+- ✅ **Smart keyword detection**
+- ✅ **Multi-language support**
+- ✅ **Comprehensive knowledge base**
+- ✅ **Professional responses**
+- ✅ **Mobile-optimized interface**
 
 ## 🌐 API Endpoints
 
@@ -133,17 +149,20 @@ Content-Type: application/json
 GET /health
 ```
 
-## 🔧 Development
+## 🔧 Development & Production
 
-### Backend Development
-- Flask runs in debug mode
-- Auto-reloads on code changes
-- Logs saved to `loan_system.log`
-
-### Frontend Development
+### Development
+- Flask with debug mode for development
 - Vite dev server with hot reload
-- TypeScript compilation
-- Tailwind CSS processing
+- Logs saved to `logs/loan_system.log`
+
+### Production Features
+- Environment variable configuration
+- Gunicorn WSGI server
+- Docker containerization
+- PWA support for mobile deployment
+- Security headers and CORS configuration
+- Performance optimizations
 
 ## 🚨 Troubleshooting
 
