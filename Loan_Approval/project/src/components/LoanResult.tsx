@@ -6,8 +6,6 @@ import {
   Info, 
   DollarSign,
   TrendingUp,
-  Calendar,
-  Percent,
   CreditCard,
   Brain
 } from 'lucide-react';
@@ -48,14 +46,6 @@ export const LoanResult: React.FC<LoanResultProps> = ({ result, onNewApplication
         return 'from-gray-500 to-slate-600';
     }
   };
-
-  const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-green-600';
-    if (score >= 60) return 'text-yellow-600';
-    if (score >= 40) return 'text-blue-600';
-    return 'text-red-600';
-  };
-
   const getCriteriaColor = (rating: string) => {
     switch (rating.toLowerCase()) {
       case 'excellent':
@@ -89,7 +79,6 @@ export const LoanResult: React.FC<LoanResultProps> = ({ result, onNewApplication
           <div className="flex items-center gap-4">
             <div className="bg-white/20 p-3 rounded-full">
               {getStatusIcon()}
-            </div>
             <div>
               <h2 className="text-3xl font-bold">{result.status}</h2>
               <p className="text-white/90 text-lg">{result.recommendation}</p>
@@ -162,12 +151,11 @@ export const LoanResult: React.FC<LoanResultProps> = ({ result, onNewApplication
                 {result.emi_ratio.toFixed(1)}%
               </span>
             </div>
-            <div className="mt-2 bg-gray-200 rounded-full h-2">
               <div 
                 className={`h-2 rounded-full transition-all duration-500 ${
                   result.emi_ratio > 50 ? 'bg-red-500' : result.emi_ratio > 30 ? 'bg-yellow-500' : 'bg-green-500'
-                }`}
-                style={{ width: `${Math.min(result.emi_ratio, 100)}%` }}
+                } emi-ratio-bar`}
+                data-width={Math.min(result.emi_ratio, 100)}
               />
             </div>
           </div>
