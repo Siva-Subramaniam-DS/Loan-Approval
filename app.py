@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session, send_from_directory, send_file
+from flask import Flask, render_template, request, jsonify, send_from_directory, send_file
 from flask_cors import CORS
 import logging
 import os
@@ -30,7 +30,6 @@ app = Flask(__name__, static_folder=static_folder)
 # Enable CORS for React frontend - Use environment variable for production
 allowed_origins = os.getenv('ALLOWED_ORIGINS', 'http://localhost:5173,http://localhost:3000').split(',')
 CORS(app, origins=allowed_origins, supports_credentials=True)
-app.secret_key = os.getenv('SECRET_KEY', 'your-secret-key-change-this-in-production')
 logger = logging.getLogger(__name__)
 
 # Import your translation utility

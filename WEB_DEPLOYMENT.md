@@ -84,8 +84,7 @@ cp .env.example .env
 
 **Update these values:**
 ```env
-# Security
-SECRET_KEY=your-super-secret-random-key-here
+# Flask Configuration
 FLASK_DEBUG=False
 
 # CORS (your production domain)

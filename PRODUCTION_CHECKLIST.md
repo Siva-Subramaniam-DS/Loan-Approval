@@ -4,7 +4,6 @@
 
 ### 🔒 Security
 - [ ] **Environment Variables**: Update `.env` file with production values
-- [ ] **Secret Key**: Change `SECRET_KEY` to a strong, random string
 - [ ] **CORS Origins**: Update `ALLOWED_ORIGINS` to your production domain
 - [ ] **Debug Mode**: Ensure `FLASK_DEBUG=False` in production
 - [ ] **Database Security**: If using database, secure connection strings
