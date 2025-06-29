@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { apiService } from '../services/api';
+import { api } from '../services/api';
 import { LoanApplication, LoanResult, ApiResponse } from '../types';
 
 export const useLoanApplication = () => {
@@ -13,7 +13,7 @@ export const useLoanApplication = () => {
     setResult(null);
 
     try {
-      const response: ApiResponse = await apiService.calculateLoan(data);
+      const response: ApiResponse = await api.calculateLoan(data);
       
       if (response.success && response.result) {
         setResult(response.result);

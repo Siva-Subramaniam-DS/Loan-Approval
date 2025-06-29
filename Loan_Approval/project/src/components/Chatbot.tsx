@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, Send, X, HelpCircle, Bot } from 'lucide-react';
-import { apiService } from '../services/api';
+import { api } from '../services/api';
 
 interface Message {
   id: string;
@@ -66,7 +66,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ language = 'en' }) => {
     setIsLoading(true);
 
     try {
-      const response = await apiService.chatbot(inputMessage, language);
+              const response = await api.chatbot(inputMessage, language);
       
       if (response.success) {
         const botMessage: Message = {

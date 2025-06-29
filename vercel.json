@@ -7,20 +7,12 @@
       "config": {
         "distDir": "dist"
       }
-    },
-    {
-      "src": "app.py",
-      "use": "@vercel/python"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "app.py"
-    },
-    {
       "src": "/(.*)",
-      "dest": "Loan_Approval/project/dist/$1"
+      "dest": "Loan_Approval/project/dist/index.html"
     }
   ]
 } 

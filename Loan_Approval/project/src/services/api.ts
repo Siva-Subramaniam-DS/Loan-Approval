@@ -1,60 +1,50 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 
-                   (import.meta.env.DEV ? 'http://localhost:5000' : window.location.origin);
+// API Configuration
+const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? 'https://your-backend-url.com' // Replace with actual backend URL when available
+  : 'http://localhost:5000';
 
-class ApiService {
-  private async makeRequest<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-    try {
-      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          ...options.headers,
-        },
-        credentials: 'include',
-        ...options,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error(`API request failed for ${endpoint}:`, error);
-      throw error;
-    }
-  }
-
-  async calculateLoan(data: any) {
-    return this.makeRequest('/calculate_loan', {
+export const api = {
+  calculateLoan: async (data: any) => {
+    const response = await fetch(`${API_BASE_URL}/api/calculate_loan`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(data),
     });
-  }
+    return response.json();
+  },
 
-  async translateText(text: string, targetLang: string) {
-    return this.makeRequest('/translate', {
+  translate: async (text: string, targetLang: string) => {
+    const response = await fetch(`${API_BASE_URL}/api/translate`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         text,
         target_lang: targetLang,
       }),
     });
-  }
+    return response.json();
+  },
 
-  async healthCheck() {
-    return this.makeRequest('/health');
-  }
-
-  async chatbot(message: string, language: string = 'en') {
-    return this.makeRequest('/chatbot', {
+  chatbot: async (message: string, language: string) => {
+    const response = await fetch(`${API_BASE_URL}/api/chatbot`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         message,
         language,
       }),
     });
-  }
-}
+    return response.json();
+  },
 
-export const apiService = new ApiService();
+  healthCheck: async () => {
+    const response = await fetch(`${API_BASE_URL}/api/health`);
+    return response.json();
+  },
+};
