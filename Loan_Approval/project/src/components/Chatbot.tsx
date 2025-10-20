@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, Send, X, HelpCircle, Bot } from 'lucide-react';
+import { MessageCircle, Send, X, Bot } from 'lucide-react';
 import { api } from '../services/api';
 
 interface Message {
@@ -31,6 +31,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ language = 'en' }) => {
       };
       setMessages([welcomeMessage]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Auto scroll to bottom
@@ -107,23 +108,23 @@ const Chatbot: React.FC<ChatbotProps> = ({ language = 'en' }) => {
   return (
     <>
       {/* Chatbot Toggle Button */}
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className={`p-4 rounded-full shadow-lg transition-all duration-300 ${
+          className={`p-3 sm:p-4 rounded-full shadow-lg transition-all duration-300 ${
             isOpen 
               ? 'bg-red-500 hover:bg-red-600' 
               : 'bg-blue-500 hover:bg-blue-600'
           } text-white`}
           aria-label={isOpen ? 'Close chat' : 'Open chat'}
         >
-          {isOpen ? <X size={24} /> : <MessageCircle size={24} />}
+          {isOpen ? <X size={20} className="sm:w-6 sm:h-6" /> : <MessageCircle size={20} className="sm:w-6 sm:h-6" />}
         </button>
       </div>
 
       {/* Chatbot Window */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 w-96 h-[500px] bg-white rounded-lg shadow-2xl border border-gray-200 flex flex-col z-40">
+        <div className="fixed bottom-20 right-4 left-4 sm:bottom-24 sm:right-6 sm:left-auto sm:w-96 h-[500px] max-h-[calc(100vh-120px)] bg-white rounded-lg shadow-2xl border border-gray-200 flex flex-col z-40">
           {/* Header */}
           <div className="bg-blue-500 text-white p-4 rounded-t-lg flex items-center justify-between">
             <div className="flex items-center space-x-2">
@@ -172,8 +173,8 @@ const Chatbot: React.FC<ChatbotProps> = ({ language = 'en' }) => {
                 <div className="bg-gray-100 p-3 rounded-lg">
                   <div className="flex space-x-1">
                     <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce animation-delay-100"></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce animation-delay-200"></div>
                   </div>
                 </div>
               </div>

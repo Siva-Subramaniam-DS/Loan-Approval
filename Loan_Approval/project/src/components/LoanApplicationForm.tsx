@@ -149,45 +149,45 @@ export const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({
   return (
     <div className="max-w-5xl mx-auto">
       {/* Hero Section */}
-      <div className="text-center mb-12">
-        <div className="inline-flex items-center gap-3 bg-gradient-to-r from-primary-600 to-secondary-600 text-white px-6 py-3 rounded-2xl mb-6 shadow-glow">
-          <CreditCard size={24} />
+      <div className="text-center mb-8 sm:mb-12">
+        <div className="inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-primary-600 to-secondary-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-xl sm:rounded-2xl mb-4 sm:mb-6 shadow-glow text-sm sm:text-base">
+          <CreditCard size={20} className="sm:w-6 sm:h-6" />
           <span className="font-semibold">Smart Loan Assessment</span>
         </div>
-        <h1 className="text-4xl lg:text-5xl font-bold text-neutral-900 mb-4 leading-tight">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-neutral-900 mb-3 sm:mb-4 leading-tight px-4">
           Get Your Loan Approved in
           <span className="bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent"> Minutes</span>
         </h1>
-        <p className="text-lg text-neutral-600 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-base sm:text-lg text-neutral-600 max-w-2xl mx-auto leading-relaxed px-4">
           Experience the future of loan approval with our AI-powered system. Get instant eligibility assessment with transparent criteria and competitive rates.
         </p>
         
         {/* Trust indicators */}
-        <div className="flex flex-wrap justify-center gap-6 mt-8 text-sm">
+        <div className="flex flex-wrap justify-center gap-3 sm:gap-6 mt-6 sm:mt-8 text-xs sm:text-sm px-4">
           <div className="flex items-center gap-2 text-success-700">
-            <Shield size={16} />
+            <Shield size={14} className="sm:w-4 sm:h-4" />
             <span>Bank-grade security</span>
           </div>
           <div className="flex items-center gap-2 text-primary-700">
-            <TrendingUp size={16} />
+            <TrendingUp size={14} className="sm:w-4 sm:h-4" />
             <span>AI-powered assessment</span>
           </div>
           <div className="flex items-center gap-2 text-secondary-700">
-            <Users size={16} />
+            <Users size={14} className="sm:w-4 sm:h-4" />
             <span>Multi-language support</span>
           </div>
         </div>
       </div>
 
-      <div className="card-elevated p-8 lg:p-12">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h2 className="text-2xl font-bold text-neutral-900 mb-2">Loan Application Form</h2>
-            <p className="text-neutral-600">Please provide accurate information for the best assessment</p>
+      <div className="card-elevated p-6 sm:p-8 lg:p-12">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+          <div className="flex-1">
+            <h2 className="text-xl sm:text-2xl font-bold text-neutral-900 mb-2">Loan Application Form</h2>
+            <p className="text-sm sm:text-base text-neutral-600">Please provide accurate information for the best assessment</p>
           </div>
           
           {/* Language Selector */}
-          <div className="w-48">
+          <div className="w-full sm:w-48">
             <CustomDropdown
               label="Language"
               name="language"
@@ -203,17 +203,17 @@ export const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Personal Information */}
-        <div className="bg-gradient-to-br from-neutral-50 to-neutral-100/50 rounded-2xl p-8 border border-neutral-200/50">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="bg-primary-100 p-3 rounded-xl">
-              <User className="text-primary-600" size={24} />
+        <div className="bg-gradient-to-br from-neutral-50 to-neutral-100/50 rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 border border-neutral-200/50">
+          <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+            <div className="bg-primary-100 p-2 sm:p-3 rounded-lg sm:rounded-xl">
+              <User className="text-primary-600" size={20} />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-neutral-900">Personal Information</h3>
-              <p className="text-neutral-600 text-sm">Basic details about yourself</p>
+              <h3 className="text-lg sm:text-xl font-bold text-neutral-900">Personal Information</h3>
+              <p className="text-neutral-600 text-xs sm:text-sm">Basic details about yourself</p>
             </div>
           </div>
-          <div className="grid lg:grid-cols-2 gap-6">
+          <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
             <FormField
               label="Age"
               name="age"
@@ -244,17 +244,17 @@ export const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({
         </div>
 
         {/* Financial Information */}
-        <div className="bg-gradient-to-br from-success-50/50 to-primary-50/30 rounded-2xl p-8 border border-success-200/30">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="bg-success-100 p-3 rounded-xl">
-              <DollarSign className="text-success-600" size={24} />
+        <div className="bg-gradient-to-br from-success-50/50 to-primary-50/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 border border-success-200/30">
+          <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+            <div className="bg-success-100 p-2 sm:p-3 rounded-lg sm:rounded-xl">
+              <DollarSign className="text-success-600" size={20} />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-neutral-900">Financial Information</h3>
-              <p className="text-neutral-600 text-sm">Your income and financial details</p>
+              <h3 className="text-lg sm:text-xl font-bold text-neutral-900">Financial Information</h3>
+              <p className="text-neutral-600 text-xs sm:text-sm">Your income and financial details</p>
             </div>
           </div>
-          <div className="grid lg:grid-cols-2 gap-6">
+          <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
             <FormField
               label="Monthly Income (₹)"
               name="monthly_income"
@@ -307,17 +307,17 @@ export const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({
         </div>
 
         {/* Loan Information */}
-        <div className="bg-gradient-to-br from-secondary-50/50 to-primary-50/30 rounded-2xl p-8 border border-secondary-200/30">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="bg-secondary-100 p-3 rounded-xl">
-              <PiggyBank className="text-secondary-600" size={24} />
+        <div className="bg-gradient-to-br from-secondary-50/50 to-primary-50/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 border border-secondary-200/30">
+          <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+            <div className="bg-secondary-100 p-2 sm:p-3 rounded-lg sm:rounded-xl">
+              <PiggyBank className="text-secondary-600" size={20} />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-neutral-900">Loan Requirements</h3>
-              <p className="text-neutral-600 text-sm">Details about the loan you need</p>
+              <h3 className="text-lg sm:text-xl font-bold text-neutral-900">Loan Requirements</h3>
+              <p className="text-neutral-600 text-xs sm:text-sm">Details about the loan you need</p>
             </div>
           </div>
-          <div className="grid lg:grid-cols-2 gap-6">
+          <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
             <FormField
               label="Loan Amount (₹)"
               name="loan_amount"
@@ -373,11 +373,11 @@ export const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({
         </div>
 
         {/* Submit Button */}
-        <div className="flex flex-col items-center pt-8 space-y-4">
+        <div className="flex flex-col items-center pt-6 sm:pt-8 space-y-3 sm:space-y-4">
           <button
             type="submit"
             disabled={loading}
-            className="btn-primary px-12 py-4 text-lg font-bold shadow-hard hover:shadow-glow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            className="btn-primary w-full sm:w-auto px-8 sm:px-12 py-3 sm:py-4 text-base sm:text-lg font-bold shadow-hard hover:shadow-glow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
           >
             {loading ? (
               <LoadingSpinner 
@@ -387,13 +387,13 @@ export const LoanApplicationForm: React.FC<LoanApplicationFormProps> = ({
               />
             ) : (
               <>
-                <CreditCard size={24} />
+                <CreditCard size={20} className="sm:w-6 sm:h-6" />
                 Check Loan Eligibility
               </>
             )}
           </button>
           
-          <p className="text-neutral-500 text-sm text-center max-w-md">
+          <p className="text-neutral-500 text-xs sm:text-sm text-center max-w-md px-4">
             By submitting this form, you agree to our terms and conditions. Your data is protected with bank-grade security.
           </p>
         </div>

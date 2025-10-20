@@ -19,23 +19,23 @@ function App() {
       {/* Background Decorations */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-bounce-gentle"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-bounce-gentle" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-bounce-gentle animation-delay-1000"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary-50 rounded-full mix-blend-multiply filter blur-2xl opacity-40"></div>
       </div>
 
       {/* Header */}
       <header className="glass-effect shadow-soft border-b border-white/20 sticky top-0 z-50 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4 group">
-              <div className="bg-gradient-to-r from-primary-600 to-secondary-600 p-3 rounded-2xl shadow-glow group-hover:shadow-glow-lg transition-all duration-300 group-hover:scale-105">
-                <Building2 className="text-white" size={28} />
+            <div className="flex items-center gap-2 sm:gap-4 group">
+              <div className="bg-gradient-to-r from-primary-600 to-secondary-600 p-2 sm:p-3 rounded-xl sm:rounded-2xl shadow-glow group-hover:shadow-glow-lg transition-all duration-300 group-hover:scale-105">
+                <Building2 className="text-white" size={20} />
               </div>
               <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-primary-700 to-secondary-700 bg-clip-text text-transparent">
+                <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-primary-700 to-secondary-700 bg-clip-text text-transparent">
                   LoanPro
                 </h1>
-                <p className="text-sm text-neutral-600 font-medium">Smart AI-Powered Loan System</p>
+                <p className="text-xs sm:text-sm text-neutral-600 font-medium hidden sm:block">Smart AI-Powered Loan System</p>
               </div>
             </div>
             
@@ -70,7 +70,7 @@ function App() {
       </header>
 
       {/* Main Content */}
-      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
         <div className="animate-fade-in">
           {error ? (
             <div className="animate-slide-in">
@@ -94,10 +94,10 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 bg-neutral-900 text-white py-16 mt-20">
+      <footer className="relative z-10 bg-neutral-900 text-white py-12 sm:py-16 mt-12 sm:mt-20">
         <div className="absolute inset-0 bg-gradient-to-r from-primary-900/20 to-secondary-900/20"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
             <div className="col-span-2 md:col-span-1">
               <div className="flex items-center gap-3 mb-6">
                 <div className="bg-gradient-to-r from-primary-500 to-secondary-500 p-2 rounded-xl">

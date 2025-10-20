@@ -34,6 +34,20 @@
   }
 }
 
+@layer utilities {
+  .animation-delay-100 {
+    animation-delay: 0.1s;
+  }
+  
+  .animation-delay-200 {
+    animation-delay: 0.2s;
+  }
+  
+  .animation-delay-1000 {
+    animation-delay: 1s;
+  }
+}
+
 @layer components {
   .btn-primary {
     display: inline-flex;

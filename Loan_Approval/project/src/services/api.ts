@@ -1,10 +1,12 @@
+import { LoanApplication } from '../types';
+
 // API Configuration
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
   ? 'https://your-backend-url.com' // Replace with actual backend URL when available
   : 'http://localhost:5000';
 
 export const api = {
-  calculateLoan: async (data: any) => {
+  calculateLoan: async (data: LoanApplication) => {
     const response = await fetch(`${API_BASE_URL}/api/calculate_loan`, {
       method: 'POST',
       headers: {

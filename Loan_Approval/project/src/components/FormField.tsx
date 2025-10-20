@@ -25,7 +25,6 @@ export const FormField: React.FC<FormFieldProps> = ({
   value,
   onChange,
   error,
-  placeholder,
   required = false,
   options,
   min,
