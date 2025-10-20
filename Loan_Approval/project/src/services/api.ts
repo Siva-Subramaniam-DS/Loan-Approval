@@ -1,8 +1,10 @@
 import { LoanApplication } from '../types';
 
 // API Configuration
-const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://your-backend-url.com' // Replace with actual backend URL when available
+const API_BASE_URL = typeof window !== 'undefined' 
+  ? (window.location.hostname === 'localhost' 
+      ? 'http://localhost:5000'
+      : 'https://cibil-score-app-production.up.railway.app')
   : 'http://localhost:5000';
 
 export const api = {
